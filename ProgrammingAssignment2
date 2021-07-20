@@ -1,21 +1,25 @@
-makeCacheMatrix <- function(x = matrix()){
-+ inv <- NULL
-+ set <- function(y) { 
-+ x <<- y
-+ inv <<- NULL
+makeCacheMatrix <- function(x = matrix()){  ## define the argument with default mode of "matrix"
++ Var <- NULL ## initialize inv as NULL; will hold value of matrix inverse
++ set <- function(y) { ## define the set function to assign new 
++ x <<- y ## value of matrix in parent environment
++ Var <<- NULL ## if there is a new matrix, reset inv to NULL
 + }
-+ get <- function() {x}
-+ setInverse <- function(inverse) {inv <<- inverse}
-+ getInverse <- function() {inv}
-+ ist(set = set, get = get, setInverse = setInverse, getInverse = getInverse)
++ get <- function() {x}  ## define the get fucntion - returns value of the matrix argument
++ setInverse <- function(inverse) {Var <<- inverse} ## assigns value of Var in parent environment
++ getInverse <- function() {Var} ## gets the value of Var where called
++ ist(set = set, get = get, setInverse = setInverse, getInverse = getInverse) ## you need this in order to refer to the functions with the $ operator
 + }
+
+## This function computes the inverse of the special "matrix" returned by makeCacheMatrix above.
+## If the inverse has already been calculated (and the matrix has not changed),
+## then cacheSolve will retrieve the inverse from the cache
 > cacheSolve <- function(x, ...) {
-+ inv <- x$geIinverse()
++ Var <- x$geIinverse()
 + if(!is.null(inv)) {
 + message("getting cached data")
 +  return(inv)
 + }
 + data <- x$get()
-+ inv <- solve(data, ...)
++ Var <- solve(data, ...)
 + x$setInverse(inv)
-+ inv
++ Var
